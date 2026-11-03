@@ -1,0 +1,25 @@
+# Gradle
+.gradle/
+build/
+
+# Compiled Java files
+*.class
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
