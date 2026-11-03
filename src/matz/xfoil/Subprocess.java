@@ -4,9 +4,12 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
+import com.pty4j.PtyProcess;
+import com.pty4j.PtyProcessBuilder;
+
 public class Subprocess implements AutoCloseable{
     
-    private final Process process;
+    private final PtyProcess process;
     private final BufferedWriter stdin;
     private final BlockingQueue<String> stdout = new LinkedBlockingQueue<>();
     
@@ -18,8 +21,8 @@ public class Subprocess implements AutoCloseable{
     private static final String EOF = new String("EOF");
 
     public Subprocess(String... args) throws IOException {
-
-        this.process = new ProcessBuilder(args).start();
+        this.process = new PtyProcessBuilder(args)
+            .start();
 
         this.stdin = new BufferedWriter(
             new OutputStreamWriter(

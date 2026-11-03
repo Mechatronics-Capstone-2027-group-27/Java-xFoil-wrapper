@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation("org.jetbrains.pty4j:pty4j:0.14.0")
+}
+
 sourceSets {
     main {
         java.setSrcDirs(listOf("src"))

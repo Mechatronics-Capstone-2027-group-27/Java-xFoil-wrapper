@@ -16,9 +16,16 @@ public class Xfoil implements AutoCloseable {
 
     private boolean viscOn = false;
 
+    private String _XFOIL__c___ = " XFOIL   c>\u001B[0K\u001B[14G\u001B[?25h";
+
+    private String ______Option__Value____or__Return______c___ = "      Option, Value   (or <Return>)    c>\u001B[0K\u001B[44G\u001B[?25h";
+    
+    private String _OPERi___c___ = ".OPERi   c>\u001B[0K\u001B[14G\u001B[?25h";
+    private String _OPERv___c___ = ".OPERv   c>\u001B[0K\u001B[14G\u001B[?25h";
+
     public Xfoil(String... args) throws IOException {
         this.process = new Subprocess(args);
-        readToInput(" XFOIL   c>\u001B[2C", Duration.ofMillis(this.maxWatchDog));
+        readToInput(_XFOIL__c___, Duration.ofMillis(this.maxWatchDog));
         toggleGui();
     }
 
@@ -67,32 +74,32 @@ public class Xfoil implements AutoCloseable {
         }
 
         throw new IllegalStateException(
-            "Watchdog timeout waiting for: " + prompt +
+            "Watchdog timeout waiting for: " + escapeForDiagnostics(prompt) +
             "\nCaptured output:\n" + "\"\"\"" + escapeForDiagnostics(output.toString()) + "\"\"\""
         );
     }
 
     private void toggleGui() throws IOException {
         this.process.write("PLOP"+newline);
-        readToInput("      Option, Value   (or <Return>)    c>\u001B[2C", Duration.ofMillis(this.maxWatchDog));
+        readToInput(______Option__Value____or__Return______c___, Duration.ofMillis(this.maxWatchDog));
         this.process.write("G"+newline);
-        readToInput("      Option, Value   (or <Return>)    c>\u001B[2C", Duration.ofMillis(this.maxWatchDog));
+        readToInput(______Option__Value____or__Return______c___, Duration.ofMillis(this.maxWatchDog));
         this.process.write(newline);
-        readToInput(" XFOIL   c>\u001B[2C", Duration.ofMillis(this.maxWatchDog));
+        readToInput(_XFOIL__c___, Duration.ofMillis(this.maxWatchDog));
     }
 
     public XfoilOut calc(XfoilInput input) throws IOException {
         if (!input.coord.matches("(?i)^NACA\\s*[0-9]{4,5}$")) {
             throw new IllegalArgumentException("Invalid NACA airfoil designation. Please enter a valid 4 or 5 digit NACA airfoil (e.g., NACA 2412).");
         }
-        String waitingForCommand = " XFOIL   c>\u001B[2C";
+        String waitingForCommand = _XFOIL__c___;
         // setup
         // input NACA
         this.process.write(input.coord+newline);
         readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
         
         this.process.write("OPER"+newline);
-        waitingForCommand = (viscOn) ? ".OPERv   c>\u001B[2C" : ".OPERi   c>\u001B[2C";
+        waitingForCommand = (viscOn) ? _OPERv___c___ : _OPERi___c___;
         readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
         this.process.write(String.format("RE %f", input.Re)+newline);
         readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
@@ -102,7 +109,7 @@ public class Xfoil implements AutoCloseable {
         // need to disable after to make function resusable
         if ((input.Re > 0 && !viscOn) || (input.Re <= 0 && viscOn)) {
             this.process.write("VISC"+newline);
-            waitingForCommand = (!viscOn) ? ".OPERv   c>\u001B[2C" : ".OPERi   c>\u001B[2C";
+            waitingForCommand = (!viscOn) ? _OPERv___c___ : _OPERi___c___;
             readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
             viscOn = !viscOn;
         }
@@ -116,7 +123,7 @@ public class Xfoil implements AutoCloseable {
 
         // exit for the next loop
         this.process.write(newline);
-        waitingForCommand = " XFOIL   c>\u001B[2C";
+        waitingForCommand = _XFOIL__c___;
         readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
         return XfoilParse.parseLastResult(stringData);
     }
