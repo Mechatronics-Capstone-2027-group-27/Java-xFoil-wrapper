@@ -20,8 +20,8 @@ public class Xfoil implements AutoCloseable {
 
     private String ______Option__Value____or__Return______c___ = "      Option, Value   (or <Return>)    c>  ";
     
-    private String _OPERi___c___ = ".OPERi   c>\u001B[0K\u001B[14G\u001B[?25h";
-    private String _OPERv___c___ = ".OPERv   c>\u001B[0K\u001B[14G\u001B[?25h";
+    private String _OPERi___c___ = ".OPERi   c>  ";
+    private String _OPERv___c___ = ".OPERv   c>  ";
 
     public Xfoil(String... args) throws IOException {
         this.process = new Subprocess(args);
@@ -89,7 +89,7 @@ public class Xfoil implements AutoCloseable {
     }
 
     public XfoilOut calc(XfoilInput input) throws IOException {
-        if (!input.coord.matches("(?i)^NACA\\s*[0-9]{4,5}$")) {
+        if (!NACA_PATTERN.matcher(input.coord).matches()) {
             throw new IllegalArgumentException("Invalid NACA airfoil designation. Please enter a valid 4 or 5 digit NACA airfoil (e.g., NACA 2412).");
         }
         String waitingForCommand = _XFOIL__c___;
