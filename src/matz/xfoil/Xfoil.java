@@ -10,7 +10,7 @@ public class Xfoil implements AutoCloseable {
     // maybe make this setable?
     private long maxWatchDog = 1500; // [ms]
     
-    private String newline = "\n\r";
+    private String newline = "\r\n";
 
     private final Subprocess process;
 
