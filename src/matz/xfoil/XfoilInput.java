@@ -5,4 +5,6 @@ public class XfoilInput {
     public double alpha = 0;
     public double Re = 1e6;
     public double Mach = 0.2;
+    public boolean init = true;
+    public int iteration_limit = 10;
 }

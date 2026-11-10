@@ -15,6 +15,8 @@ public class Xfoil implements AutoCloseable {
     private final Subprocess process;
 
     private boolean viscOn = false;
+    
+    private int iterations = 10; // default
 
     private String _XFOIL__c___ = " XFOIL   c>  ";
 
@@ -113,12 +115,23 @@ public class Xfoil implements AutoCloseable {
             readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
             viscOn = !viscOn;
         }
+
+        if (input.iteration_limit != iterations) {
+            this.process.write(String.format("ITER %d", input.iteration_limit)+newline);
+            waitingForCommand = (!viscOn) ? _OPERv___c___ : _OPERi___c___;
+            iterations = input.iteration_limit;
+        }
         
         // Do the calc
         this.process.write(String.format("ALFA %f", input.alpha)+newline);
         String stringData = readToInput(waitingForCommand, Duration.ofMillis(this.maxWatchDog));
         if (stringData.toLowerCase().contains("failed")) {
             throw new IllegalStateException("Something said it failed: " + stringData);
+        }
+
+        if (input.init) {
+            this.process.write("INIT"+newline);
+            waitingForCommand = (!viscOn) ? _OPERv___c___ : _OPERi___c___;
         }
 
         // exit for the next loop
