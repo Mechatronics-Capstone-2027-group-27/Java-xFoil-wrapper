@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class main {
     public static void main(String[] args) {
-        try (Xfoil p = new Xfoil("ssh", "-tt", "this", "\"xfoil.exe\"");) {
+        try (Xfoil p = new Xfoil("xfoil.exe");) {
             XfoilInput input = new XfoilInput();
             XfoilOut ar1 = p.calc(input);
             areoPrint(ar1);
