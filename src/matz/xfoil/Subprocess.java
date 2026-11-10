@@ -3,6 +3,7 @@ package matz.xfoil;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
+import java.util.Map;
 
 public class Subprocess implements AutoCloseable{
     
@@ -18,8 +19,15 @@ public class Subprocess implements AutoCloseable{
     private static final String EOF = new String("EOF");
 
     public Subprocess(String... args) throws IOException {
+        
+        ProcessBuilder pb = new ProcessBuilder(args);
 
-        this.process = new ProcessBuilder(args).start();
+        // Set environment variables
+        Map<String, String> env = pb.environment();
+        env.put("GFORTRAN_UNBUFFERED_PRECONNECTED", "y");
+        env.put("GFORTRAN_UNBUFFERED_ALL", "y");
+
+        this.process = pb.start();
 
         this.stdin = new BufferedWriter(
             new OutputStreamWriter(
