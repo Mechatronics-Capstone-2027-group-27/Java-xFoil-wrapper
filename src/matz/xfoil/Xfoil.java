@@ -18,7 +18,7 @@ public class Xfoil implements AutoCloseable {
 
     private String _XFOIL__c___ = " XFOIL   c>  ";
 
-    private String ______Option__Value____or__Return______c___ = "      Option, Value   (or <Return>)    c>\u001B[0K\u001B[44G\u001B[?25h";
+    private String ______Option__Value____or__Return______c___ = "      Option, Value   (or <Return>)    c>  ";
     
     private String _OPERi___c___ = ".OPERi   c>\u001B[0K\u001B[14G\u001B[?25h";
     private String _OPERv___c___ = ".OPERv   c>\u001B[0K\u001B[14G\u001B[?25h";
